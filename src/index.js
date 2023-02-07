@@ -42,7 +42,14 @@ export default class ReactConnectElements extends PureComponent {
       const end = document.querySelector(element.to);
       const path = document.querySelector(`#path${index + 1}`);
 
-      return connectElements(this.svgContainer, this.svg, path, start, end);
+      return connectElements(
+        this.svgContainer,
+        this.svg,
+        path,
+        start,
+        end,
+        element.color
+      );
     });
   };
 
@@ -54,7 +61,7 @@ export default class ReactConnectElements extends PureComponent {
         <Portal query={this.state.querySelector}>
           <div
             id="react-connect-elements-container"
-            style={{ zIndex: overlay, position: 'absolute' }}
+            style={{ zIndex: overlay, position: 'absolute', height: '100%' }}
             ref={svg => {
               this.svgContainer = svg;
             }}
