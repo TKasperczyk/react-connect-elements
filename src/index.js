@@ -77,16 +77,43 @@ export default class ReactConnectElements extends PureComponent {
                 this.svg = svg;
               }}
             >
-              {elements.map((element, index) => (
-                <path
-                  key={`${element.from}-${element.to}`}
-                  id={`path${index + 1}`}
-                  d="M0 0"
-                  stroke={element.color || color}
-                  fill="none"
-                  strokeWidth={`${strokeWidth}px`}
-                />
-              ))}
+              {elements.map((element, index) => {
+                const baseId = `${element.from}-${element.to}`;
+                const gradientId = `gradient-${baseId}`;
+                let strokeColor = element.color || color;
+                if (element.gradientColor1 && element.gradientColor2) {
+                  strokeColor = `url(#${gradientId})`;
+                }
+                return (
+                  <React.Fragment>
+                    <defs>
+                      <linearGradient
+                        id={gradientId}
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor={element.gradientColor1} />
+                        <stop offset="35%" stopColor={element.gradientColor1} />
+                        <stop offset="45%" stopColor={element.gradientColor2} />
+                        <stop
+                          offset="100%"
+                          stopColor={element.gradientColor2}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      key={baseId}
+                      id={`path${index + 1}`}
+                      d="M0 0"
+                      stroke={strokeColor}
+                      fill="none"
+                      strokeWidth={`${strokeWidth}px`}
+                    />
+                  </React.Fragment>
+                );
+              })}
             </svg>
           </div>
         </Portal>
